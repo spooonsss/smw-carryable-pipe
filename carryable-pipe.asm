@@ -361,7 +361,8 @@ HandleState:
         LDA !14E0,y                             ;  | right on top of the other pipe
         STA $95                                 ;  |
         LDA.w !D8,y                             ;  |
-        SEC : SBC #$20                          ;  |
+         ;SEC : SBC #$20                          ;  |
+        SEC : SBC #$10                          ;  |
         STA $96                                 ;  |
         LDA !14D4,y                             ;  |
         SBC #$00                                ;  |
@@ -376,6 +377,34 @@ HandleState:
         STZ $78                                 ;  |
         ;STZ $9D                                 ; /
         STZ !State
+
+
+
+        STZ !sprite_status,x
+        LDA #0
+        STA !sprite_status,y
+
+        PHY
+        STZ $00
+        STZ $01
+        LDA #$F
+        STA $02
+        LDA #1
+        %SpawnSmoke()
+        PLY
+
+        LDA.w !15A0,Y
+        ORA.w !186C,Y
+        BNE +
+        PHX
+        PHY
+        TYX
+        LDA #1
+        %SpawnSmoke()
+        PLY
+        PLX
+        +
+
 
         LDA !ControllerBackup                   ; \  re-enable the controller
         STA $0DA0|!Base2                        ; /
